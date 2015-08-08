@@ -1,0 +1,22 @@
+[package]
+name = "shuffled-seq-iter"
+version = "0.1.0"
+authors = ["Tim Neumann <mail@timnn.me>"]
+description = "Iterate through all elements in a sequence in random order"
+
+documentation = "https://timnn.github.io/shuffled-seq-iter/"
+homepage = "https://github.com/TimNN/shuffled-seq-iter"
+repository = "https://github.com/TimNN/shuffled-seq-iter"
+
+readme = "README.md"
+
+keywords = ["data-structures", "random"]
+
+license = "MIT"
+
+[features]
+[dependencies]
+rand = "*"
+
+[dev-dependencies]
+bit-vec = "*"

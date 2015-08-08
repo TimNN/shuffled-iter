@@ -56,8 +56,6 @@ pub struct ShuffledSeqIter<T = u32> where u32: Into<T> {
 
 impl<T> ShuffledSeqIter<T> where u32: Into<T> {
     pub fn new<R: Rng>(max: u32, rng: &mut R) -> ShuffledSeqIter<T> {
-        assert!(max > 0);
-
         let bits = 32 - max.leading_zeros();
 
         let max = w32(max);
@@ -129,7 +127,7 @@ fn gen_1_1024() {
 
     let mut rng = XorShiftRng::new_unseeded();
 
-    for i in 1u32 .. 1025 {
+    for i in 0u32 .. 1025 {
         let mut bv = BitVec::from_elem(i as usize + 1, false);
 
         let it: ShuffledSeqIter<u32> = ShuffledSeqIter::new(i, &mut rng);

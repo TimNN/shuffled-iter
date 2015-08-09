@@ -1,4 +1,4 @@
-# shuffled-seq-iter [![Build Status](https://travis-ci.org/TimNN/shuffled-iter.svg?branch=master)](https://travis-ci.org/TimNN/shuffled-iter)
+# shuffled-seq-iter [![Build Status](https://travis-ci.org/TimNN/shuffled-iter.svg?branch=master)](https://travis-ci.org/TimNN/shuffled-iter)[![Coverage Status](https://coveralls.io/repos/TimNN/shuffled-iter/badge.svg?branch=master&service=github)](https://coveralls.io/github/TimNN/shuffled-iter?branch=master)
 
 [Documentation](https://timnn.github.io/shuffled-iter)
 

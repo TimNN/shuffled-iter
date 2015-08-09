@@ -1,13 +1,17 @@
-//! This module proivdes an iterator which iterates through all elements in a
-//! sequence in random order without allocation each element and then shuffling.
+//! This crate provides methods to iterate over a group of values in random
+//! order, without allocation and shuffling them all.
+//!
+//! Such an iterator may be obtained via the `ShuffledIterGen` trait.
 
 #[cfg(test)] extern crate bit_vec;
 extern crate rand;
 
-use std::marker::PhantomData;
-use std::num::Wrapping;
+pub use iter::ShuffledIterGen;
 
+use std::num::Wrapping;
 use rand::Rng;
+
+mod iter;
 
 #[allow(non_camel_case_types)]
 type w32 = Wrapping<u32>;
@@ -36,8 +40,15 @@ fn gen_xor_op<R: Rng>(rng: &mut R) -> w32 {
     w32(rng.next_u32())
 }
 
-#[derive(Debug)]
-pub struct ShuffledSeqIter<T = u32> where u32: Into<T> {
+/// The actual iterator which iterates over, in random order, all `u32`s
+/// smaller than or equal to a given maximum value.
+///
+/// An instance of this struct may be obtained via the `ShuffletIterGen` trait.
+///
+/// No gurantees are made about the quality of the randomiziation, nor is the
+/// algorithem guranteed to remain unchanged between version.
+#[derive(Copy, Clone, Debug)]
+pub struct ShuffledIter {
     max: w32,
     mask: w32,
 
@@ -50,19 +61,17 @@ pub struct ShuffledSeqIter<T = u32> where u32: Into<T> {
     x2: w32,
 
     done: bool,
-
-    _phantom: PhantomData<T>,
 }
 
-impl<T> ShuffledSeqIter<T> where u32: Into<T> {
-    pub fn new<R: Rng>(max: u32, rng: &mut R) -> ShuffledSeqIter<T> {
+impl ShuffledIter {
+    fn new<R: Rng>(max: u32, rng: &mut R) -> ShuffledIter {
         let bits = 32 - max.leading_zeros();
 
         let max = w32(max);
 
         let mask = w32(shl_ignore(1, bits)) - w32(1);
 
-        ShuffledSeqIter {
+        ShuffledIter {
             max: max,
             mask: mask,
 
@@ -75,8 +84,6 @@ impl<T> ShuffledSeqIter<T> where u32: Into<T> {
             x2: gen_xor_op(rng),
 
             done: false,
-
-            _phantom: PhantomData,
         }
     }
 
@@ -101,24 +108,23 @@ impl<T> ShuffledSeqIter<T> where u32: Into<T> {
     }
 }
 
-impl<T> Iterator for ShuffledSeqIter<T> where u32: Into<T> {
-    type Item = T;
+impl Iterator for ShuffledIter {
+    type Item = u32;
 
     #[inline]
-    fn next(&mut self) -> Option<T> {
+    fn next(&mut self) -> Option<u32> {
         if self.count < self.max {
-            Some(self.next_value().into())
+            Some(self.next_value())
         } else if self.done {
             None
         } else {
             self.done = true;
             self.count = self.count - w32(1);
             // if max == u32::max, next_value would wrap to 0, triggering the first block again
-            Some(self.next_value().into())
+            Some(self.next_value())
         }
     }
 }
-
 
 #[test]
 fn gen_1_1024() {
@@ -130,7 +136,7 @@ fn gen_1_1024() {
     for i in 0u32 .. 1025 {
         let mut bv = BitVec::from_elem(i as usize + 1, false);
 
-        let it: ShuffledSeqIter<u32> = ShuffledSeqIter::new(i, &mut rng);
+        let it = ShuffledIter::new(i, &mut rng);
 
         for j in it {
             assert!(bv.get(j as usize) == Some(false));
@@ -142,13 +148,13 @@ fn gen_1_1024() {
 }
 
 #[test]
-fn u32_max() {
+fn max_u32_max() {
     use std::u32;
     use rand::XorShiftRng;
 
     let mut rng = XorShiftRng::new_unseeded();
 
-    let mut it: ShuffledSeqIter<u32> = ShuffledSeqIter::new(u32::MAX, &mut rng);
+    let mut it = ShuffledIter::new(u32::MAX, &mut rng);
 
     for _ in 0 .. 10 {
         assert!(it.next().is_some());

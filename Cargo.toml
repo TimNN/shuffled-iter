@@ -1,12 +1,12 @@
 [package]
-name = "shuffled-seq-iter"
+name = "shuffled-iter"
 version = "0.1.0"
 authors = ["Tim Neumann <mail@timnn.me>"]
-description = "Iterate through all elements in a sequence in random order"
+description = "Iterate through a set of values in random order without allocating them all"
 
-documentation = "https://timnn.github.io/shuffled-seq-iter/"
-homepage = "https://github.com/TimNN/shuffled-seq-iter"
-repository = "https://github.com/TimNN/shuffled-seq-iter"
+documentation = "https://timnn.github.io/shuffled-iter/"
+homepage = "https://github.com/TimNN/shuffled-iter"
+repository = "https://github.com/TimNN/shuffled-iter"
 
 readme = "README.md"
 

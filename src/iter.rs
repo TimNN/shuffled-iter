@@ -22,7 +22,7 @@ pub trait ShuffledIterGen<T>: Rng {
 }
 
 #[derive(Copy, Clone)]
-struct Slice<'a, T: 'a> {
+pub struct Slice<'a, T: 'a> {
     iter: SI,
     slice: &'a [T],
 }

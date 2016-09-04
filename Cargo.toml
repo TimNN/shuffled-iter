@@ -1,6 +1,6 @@
 [package]
 name = "shuffled-iter"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Tim Neumann <mail@timnn.me>"]
 description = "Iterate through a set of values in random order without allocating them all"
 

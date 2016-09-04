@@ -15,7 +15,7 @@ keywords = ["data-structures", "random"]
 license = "MIT"
 
 [dependencies]
-rand = "*"
+rand = "0.3"
 
 [dev-dependencies]
-bit-vec = "*"
+bit-vec = "0.4"
